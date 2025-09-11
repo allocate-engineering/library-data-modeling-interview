@@ -1,0 +1,12 @@
+{
+    "postgresql.connections": [
+        {
+            "label": "Library Database",
+            "host": "postgres",
+            "user": "librarian",
+            "password": "bookworm123",
+            "database": "librarydb",
+            "port": 5432
+        }
+    ]
+}

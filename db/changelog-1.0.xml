@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="1" author="system">
+        <comment>Create library management system schema</comment>
+        <sqlFile path="library-schema.sql"/>
+    </changeSet>
+
+    <!-- Example: Add new changesets by creating new SQL files -->
+    <!--
+    <changeSet id="2" author="candidate">
+        <comment>Add additional tables or modifications</comment>
+        <sqlFile path="library-changes-2.sql"/>
+    </changeSet>
+    -->
+
+</databaseChangeLog>

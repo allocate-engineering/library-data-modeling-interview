@@ -1,0 +1,43 @@
+services:
+  app:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    env_file:
+        - .env
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    depends_on:
+      - postgres
+      - pgadmin-library
+
+  postgres:
+    image: postgres:14-alpine
+    restart: unless-stopped
+    volumes:
+      - psql-data:/var/lib/postgresql/data
+    env_file:
+        - .env
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+
+  pgadmin-library:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_REPLACE_SERVERS_ON_STARTUP=true
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=librarypass
+    volumes:
+      - pga-data:/var/lib/pgadmin
+      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+volumes:
+  psql-data:
+  pga-data:
