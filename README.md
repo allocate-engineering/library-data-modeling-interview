@@ -1,20 +1,14 @@
 # Library Management System - Domain Modeling Interview
-
-A comprehensive interview question designed to test **domain modeling skills** at both the database and object-oriented programming layers.
+This interview question is designed to test your **domain modeling skills** at both the database and object-oriented programming layers.
 
 ## Overview
 
-You're tasked with designing and implementing a library management system from scratch. This interview focuses on your ability to:
+You're tasked with designing and implementing a basic library management system from scratch. To do this you'll need to:
 
-1. **Analyze complex business requirements** and identify key entities and relationships
-2. **Design a robust database schema** that enforces business rules and supports efficient queries  
-3. **Model object-oriented domain classes** that accurately represent the business domain
+1. **Analyze business requirements** and identify key entities and relationships
+2. **Design a database schema** that enforces business rules and supports efficient queries  
+3. **Model the domain in C#** that accurately represent the business domain
 4. **Implement business logic** that handles real-world constraints and edge cases
-
-**Time Allocation:** 90 minutes total
-- **Part 1: Domain Analysis & Design (30 minutes)** - Schema + Object Model Design
-- **Part 2: Implementation (45 minutes)** - Code the models and business logic
-- **Part 3: Extension & Discussion (15 minutes)** - Adapt design to new requirements
 
 ## Getting Started
 
@@ -27,32 +21,24 @@ You're tasked with designing and implementing a library management system from s
 1. **Open in Dev Container**
    - Open this project in VS Code
    - When prompted, select "Reopen in Container" 
-   - Wait for the container to build and start
+   - Wait for the devcontainer to build and start
+   - Run `docker ps`, you should now see 3 containers running (one for the container, one for postgres, and one for pgAdmin)
 
-2. **Install the recommended markdown preview extension**
-   - This will allow you to more easily read this README file.
-
-3. **Access Database**
+2. **Access Database**
    
    **pgAdmin (Web Interface)**
    - **pgAdmin**: [http://localhost:5050](http://localhost:5050)
      - Username: `admin@example.com`
      - Password: `librarypass`
-   - **Register Database in pgAdmin**:
-     - The connection to your local DB should be auto-registered and ready for you when you login.,
-     - Just in case, here are the connection details
-         - Database: `librarydb`
-         - Username: `librarian` 
-         - Password: `bookworm123`
-         - Port: `5432`
+     - The connection to your local DB should be auto-registered and ready for you when you login, but you'll need the database's password to connect which is `bookworm123`.
 
-4. **Verify Setup (at the root of the solution)**
+3. **Verify Setup (at the root of the solution)**
    ```bash   
    # Build C# project
    dotnet build
    ```
 
-5. **After Designing Your Schema** (Part 1 of interview)
+4. **After Designing Your Schema** (Part 1 of interview)
    ```bash
    # Run Liquibase to create your schema and load sample data
    cd db
@@ -73,7 +59,7 @@ You are building a library management system with these **core requirements**:
 - Each physical copy has a condition (excellent, good, fair, poor)
 
 **Library Users**
-- Users have unique library card numbers, names, emails, membership dates
+- Users have unique library card numbers, names, emails, and "membership sign-up" dates
 - Track user status (active/inactive)
 - Users can have multiple books checked out simultaneously
 
@@ -81,7 +67,7 @@ You are building a library management system with these **core requirements**:
 - Users check out specific physical copies, not just "books"
 - Checkout period is 14 days from checkout date
 - Track checkout date, due date, and return date
-- Calculate late fees at $0.50 per day overdue
+- Calculate late fees at $0.05 per day overdue (this amount may change in the future)
 - Keep historical record of all checkouts (past and current)
 
 **Business Rules**
@@ -92,7 +78,6 @@ You are building a library management system with these **core requirements**:
 
 ### Non-Functional Requirements
 - Support efficient queries for common operations (user's books, overdue books, popular authors)
-- Handle concurrent access (multiple librarians using system)
 - Maintain data integrity and referential consistency
 - Support future extensions (holds, renewals, reservations)
 
@@ -100,42 +85,26 @@ You are building a library management system with these **core requirements**:
 
 ### Your Tasks
 
-**Step 1: Entity Identification (10 minutes)**
+**Step 1: Entity Identification**
 - Identify the core domain entities and their attributes
 - Map out the relationships between entities (1:1, 1:many, many:many)
 - Consider the distinction between logical concepts (books) vs physical items (copies)
 
-**Step 2: Database Schema Design (10 minutes)**  
+**Step 2: Database Schema Design**  
 - Design tables with appropriate columns, data types, and constraints
 - Define primary keys, foreign keys, and unique constraints
 - Add indexes for common query patterns
 - Implement the schema in `db/library-schema.sql`
 
-**Step 3: Object Model Design (10 minutes)**
+**Step 3: Object Model Design**
 - Design C# classes that represent your domain entities
 - Define properties, relationships, and navigation patterns
 - Consider how your objects will map to database tables
 - Implement models in `src/Models/` directory
 
-### Design Considerations
-
-As you design, think about these questions:
-
-**Database Design:**
-- How do you model the book vs copy distinction?
-- What constraints prevent invalid states (e.g., negative copy numbers)?
-- How do you efficiently find all overdue checkouts?
-- What indexes improve query performance for common operations?
-
-**Object Model:**
-- How do you represent relationships between entities?
-- What validation logic belongs in your domain objects?
-- How do you handle optional vs required properties?
-- What methods make sense on each domain class?
-
 ### Sample Data Requirements
 
-After completing your schema, populate it with this test data:
+After completing your schema, populate it with this test data.  This can be done in `db/sample-data.sql` as a second liquibase changeset:
 
 **Books:**
 - "The Great Gatsby" (ISBN: 9780743273565, 1925) by F. Scott Fitzgerald (American, 1896)
@@ -147,9 +116,9 @@ After completing your schema, populate it with this test data:
 - Bob Smith (Card: 67890, joined: 2023-03-22)
 - Charlie Brown (Card: 11111, joined: 2023-06-10)
 
-**Current State (as of 2025-09-08):**
-- Alice has "1984" copy 1 checked out (overdue since 2025-09-08)
-- Bob has "The Great Gatsby" copy 1 checked out (due 2025-09-15)
+**Current State (as of "today"):**
+- Alice has "1984" copy 1 checked out (overdue since 3 days ago)
+- Bob has "The Great Gatsby" copy 1 checked out (due five days from today)
 - All books have 2 physical copies available
 
 ## Part 2: Implementation (45 minutes)
@@ -198,40 +167,16 @@ public class LibraryManager
 
 ### Implementation Requirements
 
-- Use **Entity Framework, Dapper, or raw SQL** - your choice
+- Use **src/data/Repository.cs** to access the database (a thin & basic wrapper about Dapper)
 - Implement proper error handling and validation
 - Return meaningful error messages for business rule violations
-- Write efficient database queries (avoid N+1 problems)
-- Handle edge cases (missing users, invalid ISBNs, etc.)
-
-## Part 3: Extension & Discussion (15 minutes)
-
-After completing your basic implementation, you'll be presented with a new requirement to test how well your design adapts to change:
-
-### Extension Scenario (Details will be provided during interview)
-
-**Examples of potential extensions:**
-- Add book reservations/holds
-- Support renewals of checkouts  
-- Add book genres and categories
-- Support multiple library branches
-- Add fine payment tracking
-
-### Discussion Topics
-
-Be prepared to discuss:
-- **Design Trade-offs**: Why did you choose your particular approach?
-- **Alternative Designs**: What other ways could you model this domain?
-- **Scalability**: How would your design handle 100,000 books and users?
-- **Data Integrity**: What could go wrong and how do you prevent it?
-- **Query Performance**: What are the bottlenecks in your design?
 
 ## Demonstration
 
 Create a `Main` method that demonstrates your system:
 
 1. Attempt to check out a book to Alice (should fail - she has overdue items)
-2. Alice returns her overdue book (calculate late fee)  
+2. Alice returns her overdue book (calculate late fee)
 3. Alice successfully checks out a new book
 4. Display the final state of all checkouts
 
@@ -256,87 +201,10 @@ This interview evaluates:
 - Adaptability to new requirements
 - Understanding of potential issues and solutions
 
-## Success Criteria
-
-**Minimum Viable Solution:**
-- ✅ Correct database schema with proper relationships
-- ✅ Domain objects that map to your schema
-- ✅ Core checkout/return logic that enforces business rules
-- ✅ Working demonstration of the key workflow
-
-**Strong Solution:**
-- ✅ All of the above, plus:
-- ✅ Efficient queries with appropriate indexing
-- ✅ Comprehensive error handling
-- ✅ Clean separation between data access and business logic
-- ✅ Good discussion of design alternatives
-
-**Excellent Solution:**
-- ✅ All of the above, plus:
-- ✅ Design that easily adapts to extension requirements
-- ✅ Advanced database features (transactions, constraints)
-- ✅ Sophisticated object model with domain methods
-- ✅ Deep understanding of trade-offs and potential improvements
-
-## Getting Help
-
-**Database Issues:**
-```bash
-# Connect to database directly
-psql -h postgres -U librarian -d librarydb
-
-# View your tables
-\dt
-
-# Check your data
-SELECT * FROM your_table_name;
-```
-
-**Clear Database and Start Fresh:**
-If you get Liquibase checksum errors, clear everything and start over:
-```bash
-# Method 1: Clear Liquibase history and re-run
-cd db
-liquibase clear-checksums
-liquibase update
-
-# Method 2: Reset entire database (nuclear option)
-psql -h postgres -U librarian -d librarydb -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
-cd db
-liquibase update
-```
-
-**Devcontainer Issues:**
-If the devcontainer fails to start due to Liquibase errors:
-```bash
-# Rebuild the container completely
-# In VS Code: Ctrl+Shift+P -> "Dev Containers: Rebuild Container"
-# Or from terminal: 
-docker-compose down --volumes
-docker-compose up -d
-```
-
-**pgAdmin Server Connection Missing:**
-If pgAdmin doesn't show the pre-configured "Library Database" server:
-```bash
-# Clear pgAdmin configuration and restart
-docker-compose down
-docker volume rm devcontainer_pga-data
-docker-compose up -d
-```
-
-**Build Issues:**
-```bash
-# Restore and build
-dotnet restore
-dotnet build
-
-# Run your program
-dotnet run --project src
-```
-
 **Focus Areas:**
-Remember, this interview is about **modeling skills**, not memorizing syntax. Focus on:
+Remember, this interview is about **modeling skills**, not memorizing syntax. 
+
+Focus on:
 - Getting the domain model right
 - Making good design decisions
 - Explaining your thought process
