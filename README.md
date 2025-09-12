@@ -81,7 +81,7 @@ You are building a library management system with these **core requirements**:
 - Maintain data integrity and referential consistency
 - Support future extensions (holds, renewals, reservations)
 
-## Part 1: Domain Analysis & Design (30 minutes)
+## Part 1: Domain Analysis & Design
 
 ### Your Tasks
 
@@ -121,7 +121,7 @@ After completing your schema, populate it with this test data.  This can be done
 - Bob has "The Great Gatsby" copy 1 checked out (due five days from today)
 - All books have 2 physical copies available
 
-## Part 2: Implementation (45 minutes)
+## Part 2: Implementation
 
 ### Core Business Logic
 
