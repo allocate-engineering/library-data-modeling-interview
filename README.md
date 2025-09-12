@@ -24,7 +24,7 @@ You're tasked with designing and implementing a basic library management system 
    - Wait for the devcontainer to build and start
    - Run `docker ps`, you should now see 3 containers running (one for the container, one for postgres, and one for pgAdmin)
 
-2. **Access Database**
+2. **Confirm you can access the database through pgAdmin**
    
    **pgAdmin (Web Interface)**
    - **pgAdmin**: [http://localhost:5050](http://localhost:5050)
