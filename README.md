@@ -48,42 +48,6 @@ You're tasked with designing and implementing a basic library management system 
    liquibase update
    ```
 
-## Business Requirements
-
-You are building a library management system with these **core requirements**:
-
-### Functional Requirements
-
-**Books & Authors**
-- Track books with ISBN, title, publication year
-- Books can have multiple authors (e.g., "Good Omens" by Terry Pratchett & Neil Gaiman)
-- Authors have names, birth years, and nationalities
-- Libraries stock multiple physical copies of popular books
-- Each physical copy has a condition (excellent, good, fair, poor)
-
-**Library Users**
-- Users have unique library card numbers, names, emails, and "membership sign-up" dates
-- Track user status (active/inactive)
-- Users can have multiple books checked out simultaneously
-
-**Checkout System**
-- Users check out specific physical copies, not just "books"
-- Checkout period is 14 days from checkout date
-- Track checkout date, due date, and return date
-- Calculate late fees at $0.05 per day overdue (this amount may change in the future)
-- Keep historical record of all checkouts (past and current)
-
-**Business Rules**
-- A physical copy can only be checked out by one user at a time
-- Users with overdue books cannot check out additional books
-- Books must be returned before checking out new ones if user has overdue items
-- System must prevent double-booking of the same physical copy
-
-### Non-Functional Requirements
-- Support efficient queries for common operations (user's books, overdue books, popular authors)
-- Maintain data integrity and referential consistency
-- Support future extensions (holds, renewals, reservations)
-
 ## Part 1: Domain Analysis & Design
 
 ### Your Tasks
@@ -91,7 +55,7 @@ You are building a library management system with these **core requirements**:
 > **Since we only have 90 minutes, we'd like you to take a "slice-based" approach to the following where you choose an entity and implement support for it from the DB up through the code layer, writing code in Program.cs to prove that slice works before moving to the next entity.  For example, please complete the **User** table, corresponding data model class, and code in Program.cs to insert and read back a record before moving on to modeling books, authors, etc.**
 
 **Step 1: Entity Identification**
-- Identify the core domain entities and their attributes
+- Identify the core domain entities and their attributes (requirements are below)
 - Map out the relationships between entities (1:1, 1:many, many:many)
 - Consider the distinction between logical concepts (books) vs physical items (copies)
 
@@ -106,6 +70,7 @@ You are building a library management system with these **core requirements**:
 - Define properties, relationships, and navigation patterns
 - Consider how your objects will map to database tables
 - Implement models in `src/Models/` directory
+- A basic Dapper wrapper has been provided for you in **src/data/Repository.cs** that your code should use to access the database.
 
 ### Sample Data Requirements
 
@@ -152,6 +117,42 @@ public class LibraryManager
 }
 ```
 
+## Business Requirements
+
+You are building a library management system with these **core requirements**:
+
+### Functional Requirements
+
+**Books & Authors**
+- Track books with ISBN, title, publication year
+- Books can have multiple authors (e.g., "Good Omens" by Terry Pratchett & Neil Gaiman)
+- Authors have names, birth years, and nationalities
+- Libraries stock multiple physical copies of popular books
+- Each physical copy has a condition (excellent, good, fair, poor)
+
+**Library Users**
+- Users have unique library card numbers, names, emails, and "membership sign-up" dates
+- Track user status (active/inactive)
+- Users can have multiple books checked out simultaneously
+
+**Checkout System**
+- Users check out specific physical copies, not just "books"
+- Checkout period is 14 days from checkout date
+- Track checkout date, due date, and return date
+- Calculate late fees at $0.05 per day overdue (this amount may change in the future)
+- Keep historical record of all checkouts (past and current)
+
+**Business Rules**
+- A physical copy can only be checked out by one user at a time
+- Users with overdue books cannot check out additional books
+- Books must be returned before checking out new ones if user has overdue items
+- System must prevent double-booking of the same physical copy
+
+### Non-Functional Requirements
+- Support efficient queries for common operations (user's books, overdue books, popular authors)
+- Maintain data integrity and referential consistency
+- Support future extensions (holds, renewals, reservations)
+
 ### Key Business Logic to Implement
 
 1. **Checkout Validation**
@@ -169,12 +170,6 @@ public class LibraryManager
    - Efficiently retrieve user's active checkouts
    - Find available copies (not currently checked out)
    - Determine if user has overdue books
-
-### Implementation Requirements
-
-- Use **src/data/Repository.cs** to access the database (a thin & basic wrapper about Dapper)
-- Implement proper error handling and validation
-- Return meaningful error messages for business rule violations
 
 ## Demonstration
 
