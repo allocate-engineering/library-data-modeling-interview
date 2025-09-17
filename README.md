@@ -1,12 +1,15 @@
 # Library Management System - Domain Modeling Interview
+
 This interview question is designed to test your **domain modeling skills** at both the database and object-oriented programming layers.
+
+Please read these instructions in full before you begin coding.
 
 ## Overview
 
 You're tasked with designing and implementing a basic library management system from scratch. To do this you'll need to:
 
 1. **Analyze business requirements** and identify key entities and relationships
-2. **Design a database schema** that enforces business rules and supports efficient queries  
+2. **Design a database schema** that enforces business rules and supports efficient queries
 3. **Model the domain in C#** that accurately represent the business domain
 4. **Implement business logic** that handles real-world constraints and edge cases
 
@@ -85,6 +88,8 @@ You are building a library management system with these **core requirements**:
 
 ### Your Tasks
 
+> **Since we only have 90 minutes, we'd like you to take a "slice-based" approach to the following where you choose an entity and implement support for it from the DB up through the code layer, writing code in Program.cs to prove that slice works before moving to the next entity.  For example, please complete the **User** table, corresponding data model class, and code in Program.cs to insert and read back a record before moving on to modeling books, authors, etc.**
+
 **Step 1: Entity Identification**
 - Identify the core domain entities and their attributes
 - Map out the relationships between entities (1:1, 1:many, many:many)
@@ -94,7 +99,7 @@ You are building a library management system with these **core requirements**:
 - Design tables with appropriate columns, data types, and constraints
 - Define primary keys, foreign keys, and unique constraints
 - Add indexes for common query patterns
-- Implement the schema in `db/library-schema.sql`
+- Implement the schema in `db/library-schema.sql` (`liquibase update` to run) or you can create tables through pgAdmin.
 
 **Step 3: Object Model Design**
 - Design C# classes that represent your domain entities
@@ -104,7 +109,7 @@ You are building a library management system with these **core requirements**:
 
 ### Sample Data Requirements
 
-After completing your schema, populate it with this test data.  This can be done in `db/sample-data.sql` as a second liquibase changeset:
+After completing your schema, populate it with this test data.  This can be done in `db/sample-data.sql` as a second liquibase changeset, or you can insert data through code in Program.cs or via pgadmin:
 
 **Books:**
 - "The Great Gatsby" (ISBN: 9780743273565, 1925) by F. Scott Fitzgerald (American, 1896)
