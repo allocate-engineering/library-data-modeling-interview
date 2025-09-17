@@ -1,8 +1,8 @@
 # Library Management System - Domain Modeling Interview
 
-This interview question is designed to test your **domain modeling skills** at both the database and object-oriented programming layers.
+**Please read these instructions in full before you begin coding.**
 
-Please read these instructions in full before you begin coding.
+This interview question is designed to test your **domain modeling skills** at both the database and object-oriented programming layers.
 
 ## Overview
 
